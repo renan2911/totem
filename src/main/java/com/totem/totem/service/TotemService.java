@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class TotemService {
@@ -35,29 +36,36 @@ public class TotemService {
         boolean cond = false;
         String senha = null;
 
-        while (!cond){
-            if(prioridade.equalsIgnoreCase("S")){
-                senha = "AP-"+contaProxSenha();;
-            }
-            if(totemRepository.findBySenha(senha).isEmpty()){
-                cond = true;
-            }
+        if(prioridade.equalsIgnoreCase("S")){
+            senha = "AP-"+contaProxSenha();;
         }
 
         return senha;
     }
 
     public Integer contaProxSenha(){
-        ControlaQtdSenhaEntity controlaSenha = new ControlaQtdSenhaEntity();
+        Optional<ControlaQtdSenhaEntity> controlsSena = qtdSenha.findById(1L);
 
-        controlaSenha.setQtdSenhaGeradaAtual(controlaSenha.getQtdSenhaGeradaAtual()+1);
+        ControlaQtdSenhaEntity control = controlsSena.get();
 
-        qtdSenha.save(controlaSenha);
+        control.setQtdSenhaGeradaAtual(controlsSena.get().getQtdSenhaGeradaAtual()+1);
 
-        return controlaSenha.getQtdSenhaGeradaAtual();
+        qtdSenha.save(control);
+
+        return control.getQtdSenhaGeradaAtual();
     }
 
     public TotemDTO retornaSenha(String senha){
         return TotemDTO.builder().senha("Sua senha: "+ senha).build();
+    }
+
+    public String inicia(){
+        ControlaQtdSenhaEntity controlsSena = new ControlaQtdSenhaEntity();
+
+        controlsSena.setQtdSenhaGeradaAtual(0);
+
+        qtdSenha.save(controlsSena);
+
+        return "Sucess!";
     }
 }

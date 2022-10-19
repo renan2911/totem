@@ -21,4 +21,9 @@ public class TotemController {
     public ResponseEntity<TotemDTO> gerarSenha(@RequestBody @Validated TotemPrioridadeDTO totemDto){
         return new ResponseEntity<TotemDTO>(totemService.gerarSenhaDeAcordoComAPrioridade(totemDto), HttpStatus.CREATED);
     }
+
+    @PostMapping("/iniciar")
+    public String iniciar(){
+        return totemService.inicia();
+    }
 }
