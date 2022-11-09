@@ -9,7 +9,9 @@ import com.totem.totem.repository.TotemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -35,10 +37,13 @@ public class TotemService {
     public String geradorSenha(String prioridade){
         boolean cond = false;
         String senha = null;
+        DateTimeFormatter br = DateTimeFormatter.ofPattern("dd-MM");
+        LocalDate data;
 
-        if(prioridade.equalsIgnoreCase("S")){
-            senha = "AP-"+contaProxSenha();;
-        }
+        data = LocalDate.parse(LocalDate.now().toString(), br);
+
+        senha = prioridade+"-"+contaProxSenha()+"-"+data;
+
 
         return senha;
     }
@@ -66,6 +71,6 @@ public class TotemService {
 
         qtdSenha.save(controlsSena);
 
-        return "Sucess!";
+        return "Sistema iniciado com sucesso! :)";
     }
 }
