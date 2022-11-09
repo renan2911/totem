@@ -35,15 +35,13 @@ public class TotemService {
     }
 
     public String geradorSenha(String prioridade){
-        boolean cond = false;
         String senha = null;
         DateTimeFormatter br = DateTimeFormatter.ofPattern("dd-MM");
-        LocalDate data;
+        String data;
 
-        data = LocalDate.parse(LocalDate.now().toString(), br);
+        data = LocalDate.now().format(br);
 
         senha = prioridade+"-"+contaProxSenha()+"-"+data;
-
 
         return senha;
     }
